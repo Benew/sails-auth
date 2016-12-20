@@ -54,5 +54,15 @@ module.exports = {
         resolve(created);
       });
     });
-  }
+  },
+  afterDestroy: [function(users, cb){
+    try{
+      Passport.destroy({user: _.pluck(users, "id")}).exec(function(err){
+        if(err) sails.log.error(err);
+        return cb();
+      });
+    } catch (e) {
+      return cb(e);
+    }
+  }]
 };
